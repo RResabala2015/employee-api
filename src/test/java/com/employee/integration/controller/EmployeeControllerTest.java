@@ -57,7 +57,7 @@ class EmployeeControllerTest {
         }
 
         // Test pagination parameters
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/employees")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/employees")
                         .param("offset", "1")
                         .param("pageSize", "5")
                         .param("sortBy", "firstName")
@@ -79,7 +79,7 @@ class EmployeeControllerTest {
 
     @Test
     void getEmployeeById_ShouldReturnEmployeeWhenExists() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/employees/{id}", existingEmployee.getId())
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/employees/{id}", existingEmployee.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(existingEmployee.getId()))
@@ -88,7 +88,7 @@ class EmployeeControllerTest {
 
     @Test
     void getEmployeeById_ShouldReturn404WhenNotFound() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/employees/9999")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/employees/9999")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -98,7 +98,7 @@ class EmployeeControllerTest {
         EmployeeDto newEmployee = TestDataFactory.buildTestEmployeeDtoWithFullData();
         newEmployee.setEmail("new.employee@example.com");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/employees")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/employees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newEmployee)))
                 .andExpect(status().isCreated())
@@ -110,7 +110,7 @@ class EmployeeControllerTest {
     void createEmployee_ShouldReturnValidationErrors() throws Exception {
         EmployeeDto invalidEmployee = EmployeeDto.builder().build();
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/employees")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/employees")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidEmployee)))
                 .andExpect(status().isBadRequest())
@@ -130,7 +130,7 @@ class EmployeeControllerTest {
         updateDto.setFirstName("UpdatedFirstName");
         updateDto.setLastName("UpdatedLastName");
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/employees/{id}", existingEmployee.getId())
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/employees/{id}", existingEmployee.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateDto)))
                 .andExpect(status().isOk())
@@ -142,7 +142,7 @@ class EmployeeControllerTest {
     void updateEmployee_ShouldReturn404ForNonExistingId() throws Exception {
         EmployeeDto updateDto = TestDataFactory.buildTestEmployeeDtoWithFullData();
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/employees/9999")
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/employees/9999")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateDto)))
                 .andExpect(status().isNotFound());
@@ -150,25 +150,25 @@ class EmployeeControllerTest {
 
     @Test
     void deleteEmployee_ShouldReturnNoContent() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/employees/{id}", existingEmployee.getId()))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/employees/{id}", existingEmployee.getId()))
                 .andExpect(status().isNoContent());
 
     }
 
     @Test
     void deleteEmployee_ShouldReturn404ForNonExistingId() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/employees/9999"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/employees/9999"))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     void getAllEmployees_ShouldReturnEmptyListWhenNoRecords() throws Exception {
         // Delete the existing employee
-        mockMvc.perform(MockMvcRequestBuilders.delete("/employees/{id}", existingEmployee.getId()))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/employees/{id}", existingEmployee.getId()))
                 .andExpect(status().isNoContent());
 
         // Verify that no employees exist
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/employees")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/employees")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();

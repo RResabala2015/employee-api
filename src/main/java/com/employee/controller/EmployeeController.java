@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping(path = "/employees")
+@RequestMapping(path = "/api/v1/employees")
 public class EmployeeController {
 
     @Autowired

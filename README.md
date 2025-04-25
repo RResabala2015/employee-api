@@ -6,20 +6,21 @@
 2. Spring Boot v3.x.x
 3. Spring Data JPA
 4. H2 Database
-5. Maven
-6. Docker
-7. Kubernetes
+5. Mysql Database
+6. Maven
+7. Docker
+8. Kubernetes
 
 ## About The Project
 
 This is an Employee Management application built with Spring Boot. It provides CRUD REST APIs for managing employee records, with support for pagination and sorting.
 
 ### Features:
-1. **POST /employees** - Create a new employee.
-2. **GET /employees** - Retrieve all employees (supports pagination and sorting).
-3. **GET /employees/{id}** - Retrieve a specific employee by ID.
-4. **PUT /employees/{id}** - Update an existing employee.
-5. **DELETE /employees/{id}** - Delete an employee.
+1. **POST /api/v1/employees** - Create a new employee.
+2. **GET /api/v1/employees** - Retrieve all employees (supports pagination and sorting).
+3. **GET /api/v1/employees/{id}** - Retrieve a specific employee by ID.
+4. **PUT /api/v1/employees/{id}** - Update an existing employee.
+5. **DELETE /api/v1/employees/{id}** - Delete an employee.
 
 ## Project Repository
 
@@ -34,8 +35,8 @@ This is an Employee Management application built with Spring Boot. It provides C
 Clone the repository and navigate to the project directory:
 
 ```bash
-git clone git@github.com:veerao05/employee-springboot.git
-cd employee-springboot
+git clone https://github.com/RResabala2015/employee-api.git
+cd employee-api
 ```
 
 ## Prerequisites & Installation
@@ -62,7 +63,7 @@ java -jar target/employee-0.0.1-SNAPSHOT.jar
 ```
 After starting the application, you can access:
 
-REST APIs: http://localhost:8080/employees
+REST APIs: http://localhost:8080/api/v1/employees
 H2 Console: http://localhost:8080/h2-console
 (JDBC URL: jdbc:h2:mem:employeedb, username: sa, no password)
 
@@ -107,17 +108,17 @@ IntelliJ IDEA built-in formatter
 Sample API Requests:
 
 GET endpoint for all employees: 
-http://localhost:8080/employees
+http://localhost:8080/api/v1/employees
 
 
 GET employees with pagination and sorting:
-GET http://localhost:8080/employees?offset=0&pageSize=5&sortBy=firstName&dir=ASC
+GET http://localhost:8080/api/v1/employees?offset=0&pageSize=5&sortBy=firstName&dir=ASC
 
 GET endpoint : get employee by id:
-http://localhost:8080/employees/{id}
+http://localhost:8080/api/v1/employees/{id}
 
 POST endpoint : Create an employee:
-POST http://localhost:8080/employees
+POST http://localhost:8080/api/v1/employees
 
 ```json
 
@@ -137,7 +138,7 @@ POST http://localhost:8080/employees
 PUT endpoint: Update an employee by id
 
 ``` json
-PUT http://localhost:8080/employees/1
+PUT http://localhost:8080/api/v1/employees/1
 Content-Type: application/json
 
 {
@@ -156,5 +157,5 @@ Content-Type: application/json
 DELETE endpoint : Delete an employee by id 
 
 ``` json
-DELETE http://localhost:8080/employees/1
+DELETE http://localhost:8080/api/v1/employees/1
 ```

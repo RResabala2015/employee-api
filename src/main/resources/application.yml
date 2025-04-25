@@ -5,23 +5,20 @@ logging:
     # You can add other packages you want to debug as well
 
 spring:
-  h2:
-    console:
-      enabled: true
   datasource:
-    url: jdbc:h2:file:~/data/testdb;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
-    username: sa
-    password: password
-  name: employee-api
+    url: jdbc:mysql://localhost:3307/bdempleados?useSSL=false&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: rootpassword
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+
+  application:
+    name: employee-api
 
 server:
   port: 8080
-  servlet:
-    context-path: /api
-  compression:
-    enabled: true
-    mime-types: application/json,application/xml,text/html,text/plain,text/css,text/javascript,application/javascript
-    min-response-size: 1024
-    # Optional: Set the compression level (0-9)
-    # level: 6
     
