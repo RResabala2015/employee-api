@@ -1,24 +1,18 @@
-logging:
-  level:
-    org.springframework: DEBUG  # Enables debug logging for Spring Boot
-    org.hibernate: DEBUG         # Enables debug logging for Hibernate (if using JPA)
-    # You can add other packages you want to debug as well
-
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3307/bdempleados?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3306}/${DB_NAME:dbempleados}?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: rootpassword
+    username: ${DB_USER:root}
+    password: ${DB_PASS:rootpassword}
   jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: false
 
   application:
     name: employee-api
 
 server:
-  port: 8080
+  port: ${PORT:8080}
     

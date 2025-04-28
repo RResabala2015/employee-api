@@ -1,0 +1,27 @@
+logging:
+  level:
+    org.springframework: DEBUG  # Enables debug logging for Spring Boot
+    org.hibernate: DEBUG         # Enables debug logging for Hibernate (if using JPA)
+    # You can add other packages you want to debug as well
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  h2:
+    console:
+      enabled: true 
+
+  application:
+    name: employee-api
+
+server:
+  port: 8080
+    
