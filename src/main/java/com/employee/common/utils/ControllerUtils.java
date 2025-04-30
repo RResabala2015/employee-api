@@ -19,6 +19,8 @@ public class ControllerUtils {
      * @param <T>     type
      * @return ResponseEntity<TeamResponse < T>>
      */
+    private ControllerUtils() {}
+
     public static <T> ResponseEntity<EmployeeResponse<T>> buildOkResponse(final Page<T> results) {
 
         final EmployeeResponse<T> response =

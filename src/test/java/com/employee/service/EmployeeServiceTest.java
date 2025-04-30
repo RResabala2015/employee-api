@@ -79,7 +79,7 @@ class EmployeeServiceTest {
 
     @Test
     void testSaveEmployee() {
-        when(employeeMapper.EmployeeDtoToDao(employeeDto)).thenReturn(employee);
+        when(employeeMapper.employeeDtoToDao(employeeDto)).thenReturn(employee);
         when(employeeRepository.save(employee)).thenReturn(employee);
 
         Employee result = employeeService.saveEmployee(employeeDto);
@@ -103,17 +103,20 @@ class EmployeeServiceTest {
     void testFindEmployeeById() {
         when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
 
-        Employee result = employeeService.findEmployeeById(1L);
+        Optional<Employee> result = employeeService.findEmployeeById(1L);
 
         assertNotNull(result);
-        assertEquals(1L, result.getId());
+        assertTrue(result.isPresent());
+        assertEquals(1L, result.get().getId());
     }
 
     @Test
     void testFindEmployeeByIdNotFound() {
-        when(employeeRepository.findById(1L)).thenReturn(Optional.empty());
+        when(employeeRepository.findById(999L)).thenReturn(Optional.empty());
 
-        assertThrows(EmployeeException.class, () -> employeeService.findEmployeeById(1L));
+        Optional<Employee> result = employeeService.findEmployeeById(999L);
+
+        assertTrue(result.isEmpty(), "when employee should not exist");
     }
 
     @Test

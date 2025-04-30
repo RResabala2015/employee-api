@@ -6,16 +6,13 @@ import com.employee.dto.EmployeeDto;
 import com.employee.exception.EmployeeException;
 import com.employee.repository.EmployeeRepository;
 import jakarta.annotation.Resource;
+import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ReflectionUtils;
-
-import java.lang.reflect.Field;
-import java.time.LocalDate;
-import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -25,26 +22,25 @@ public class EmployeeService {
     @Resource
     private EmployeeMapper employeeMapper;
 
-    public void test() {
-        System.out.println("tets");
-    }
-
     public Employee getEmployee(Long id) {
         return employeeRepository.findById(id)
-                .orElseThrow(() -> new EmployeeException("Employee not found with id " + id));
+            .orElseThrow(() -> new EmployeeException("Employee not found with id " + id));
     }
 
     public Employee saveEmployee(EmployeeDto employeeDto) {
-        return employeeRepository.save(employeeMapper.EmployeeDtoToDao(employeeDto));
+        employeeDto.setDateOfJoining(LocalDate.now());
+        return employeeRepository.save(employeeMapper.employeeDtoToDao(employeeDto));
     }
 
-    public Page<Employee> findTeamWithPagination(final int offset, final int pageSize,
-                                                 final String sortBy, final Sort.Direction dir) {
+    public Page<Employee> findTeamWithPagination(
+        final int offset, final int pageSize,
+        final String sortBy, final Sort.Direction dir
+    ) {
         return employeeRepository.findAll(PageRequest.of(offset, pageSize, Sort.by(dir, sortBy)));
     }
 
-    public Employee findEmployeeById(Long id) {
-        return employeeRepository.findById(id).orElseThrow(() -> new EmployeeException("Employee not found with id " + id));
+    public Optional<Employee> findEmployeeById(Long id) {
+        return employeeRepository.findById(id);
     }
 
     public void deleteEmployeeById(Long id) {

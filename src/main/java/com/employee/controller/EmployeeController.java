@@ -1,13 +1,12 @@
 package com.employee.controller;
 
-import com.employee.common.mapper.EmployeeMapper;
 import com.employee.common.utils.ControllerUtils;
 import com.employee.dao.Employee;
 import com.employee.dto.EmployeeDto;
 import com.employee.response.EmployeeResponse;
 import com.employee.service.EmployeeService;
-import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
@@ -22,39 +21,34 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @Resource
-    private EmployeeMapper employeeMapper;
-
     @GetMapping
     public ResponseEntity<EmployeeResponse<Employee>> getAllEmployees(
-            @RequestParam(defaultValue = "0") int offset,
-            @RequestParam(defaultValue = "10") int pageSize,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "ASC") Direction dir
+        @RequestParam(defaultValue = "0") int offset,
+        @RequestParam(defaultValue = "10") int pageSize,
+        @RequestParam(defaultValue = "id") String sortBy,
+        @RequestParam(defaultValue = "ASC") Direction dir
     ) {
         return ControllerUtils.buildOkResponse(
-                employeeService.findTeamWithPagination(offset, pageSize, sortBy, dir));
-
-
+            employeeService.findTeamWithPagination(offset, pageSize, sortBy, dir)
+        );
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity
-            <Employee> getEmployeeById(@PathVariable Long id) {
-        Employee employee = employeeService.findEmployeeById(id);
-        if (employee != null) {
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
+        Optional<Employee> employeeOpt = employeeService.findEmployeeById(id);
+        
+        if (employeeOpt.isPresent()) {
+            Employee employee = employeeOpt.get();
             return ResponseEntity.status(HttpStatus.OK).body(employee);
-
         } else {
-            System.out.println("Not Found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
     @PostMapping
     public ResponseEntity<Employee> saveEmployee(@Valid @RequestBody EmployeeDto employeeDto) {
-        System.out.println(employeeDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(employeeService.saveEmployee(employeeDto));
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(employeeService.saveEmployee(employeeDto));
     }
 
     @DeleteMapping("/{id}")

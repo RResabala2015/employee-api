@@ -7,9 +7,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.validation.FieldError;
 
 
 /**
@@ -28,29 +28,14 @@ public class GlobalExceptionHandling {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<Object> handleMethodArgumentNotValidException(
-            final MethodArgumentNotValidException exception) {
+        final MethodArgumentNotValidException exception
+    ) {
         Map<String, String> errorMap = new HashMap<>();
-        exception.getBindingResult().getFieldErrors().forEach(error -> {
+        exception.getBindingResult().getFieldErrors().forEach(
+            (FieldError error) -> {
             errorMap.put(error.getField(), error.getDefaultMessage());
         });
         return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
-    }
-
-
-    /**
-     * Wrap All TeamsApiException Exception
-     *
-     * @param exception identifies unique contact
-     * @return ResponseEntity<Object>
-     */
-    //@ExceptionHandler(EmployeeException.class)
-    public final ResponseEntity<RestErrorResponse> handleEmployeeException(
-            final EmployeeException exception) {
-        log.error(exception.getMessage());
-        final RestErrorResponse errorResponse = new RestErrorResponse();
-        errorResponse.setTimestamp(Instant.now().toEpochMilli());
-        errorResponse.setMsg(exception.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
 }

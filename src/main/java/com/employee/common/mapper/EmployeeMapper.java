@@ -7,13 +7,16 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring",
-        uses = {LocalDateMapper.class})
+    uses = {LocalDateMapper.class})
 public interface EmployeeMapper {
-    EmployeeDto EmployeeDaoToDto(Employee employee);
+    EmployeeDto employeeDaoToDto(Employee employee);
 
-    Employee EmployeeDtoToDao(EmployeeDto EmployeeDto);
+    Employee employeeDtoToDao(EmployeeDto employeeDto);
 
     @Mapping(target = "id", ignore = true)
-    void updateEmployeeFromDto(EmployeeDto dto, @MappingTarget Employee employee);
+    void updateEmployeeFromDto(
+        EmployeeDto employeeDto,
+        @MappingTarget Employee employee
+    );
 
 }
